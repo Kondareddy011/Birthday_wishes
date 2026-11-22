@@ -413,46 +413,55 @@ export function toggleBackgroundMusic(onStateChange) {
 export function startBackgroundMusic(onComplete) {
   const ctx = getAudioContext();
   if (!ctx) return;
-  stopBackgroundMusic();
 
-  isMelodyPlaying = true;
-  let currentNoteIdx = 0;
+  const play = () => {
+    stopBackgroundMusic();
+    isMelodyPlaying = true;
+    let currentNoteIdx = 0;
 
-  function scheduleNextNote() {
-    if (!isMelodyPlaying) return;
-    const item = happyBirthdayNotes[currentNoteIdx];
-    const now = ctx.currentTime;
+    function scheduleNextNote() {
+      if (!isMelodyPlaying) return;
+      const item = happyBirthdayNotes[currentNoteIdx];
+      const now = ctx.currentTime;
 
-    const osc = ctx.createOscillator();
-    const oscHarmonic = ctx.createOscillator();
-    const gain = ctx.createGain();
+      const osc = ctx.createOscillator();
+      const oscHarmonic = ctx.createOscillator();
+      const gain = ctx.createGain();
 
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(item.note, now);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(item.note, now);
 
-    oscHarmonic.type = 'triangle';
-    oscHarmonic.frequency.setValueAtTime(item.note * 2, now);
+      oscHarmonic.type = 'triangle';
+      oscHarmonic.frequency.setValueAtTime(item.note * 2, now);
 
-    gain.gain.setValueAtTime(0, now);
-    gain.gain.linearRampToValueAtTime(0.18, now + 0.04);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + item.dur * 0.95);
+      gain.gain.setValueAtTime(0, now);
+      gain.gain.linearRampToValueAtTime(0.18, now + 0.04);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + item.dur * 0.95);
 
-    osc.connect(gain);
-    oscHarmonic.connect(gain);
-    gain.connect(ctx.destination);
+      osc.connect(gain);
+      oscHarmonic.connect(gain);
+      gain.connect(ctx.destination);
 
-    osc.start(now);
-    oscHarmonic.start(now);
-    osc.stop(now + item.dur);
-    oscHarmonic.stop(now + item.dur);
+      osc.start(now);
+      oscHarmonic.start(now);
+      osc.stop(now + item.dur);
+      oscHarmonic.stop(now + item.dur);
 
-    currentNoteIdx = (currentNoteIdx + 1) % happyBirthdayNotes.length;
+      currentNoteIdx = (currentNoteIdx + 1) % happyBirthdayNotes.length;
 
-    const interval = (item.dur * 0.95 + 0.05) * 1000;
-    bgLoopId = setTimeout(scheduleNextNote, interval);
+      const interval = (item.dur * 0.95 + 0.05) * 1000;
+      bgLoopId = setTimeout(scheduleNextNote, interval);
+    }
+
+    scheduleNextNote();
+    if (onComplete) onComplete(true);
+  };
+
+  if (ctx.state === 'suspended') {
+    ctx.resume().then(play).catch(play);
+  } else {
+    play();
   }
-
-  scheduleNextNote();
 }
 
 export function stopBackgroundMusic() {

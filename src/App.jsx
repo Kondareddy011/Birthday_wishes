@@ -20,7 +20,7 @@ import AIBirthdayGeneratorModal from './components/AIBirthdayGeneratorModal';
 import ShareModal from './components/ShareModal';
 import AdminDashboardModal from './components/AdminDashboardModal';
 import confetti from 'canvas-confetti';
-import { playPartyFanfare } from './utils/soundEffects';
+import { playPartyFanfare, startBackgroundMusic, isAudioPlaying } from './utils/soundEffects';
 
 export default function App() {
   // Unlocked Pages Progression (Starts with only Chapter 1; hides the rest one after one!)
@@ -126,6 +126,49 @@ export default function App() {
   const [isAIOpen, setIsAIOpen] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
+
+  // Autoplay Celebration Music as soon as the site is opened
+  useEffect(() => {
+    let unmounted = false;
+
+    const playMusic = () => {
+      try {
+        startBackgroundMusic(() => {
+          if (!unmounted) setIsPlayingAudio(true);
+        });
+        if (!unmounted) setIsPlayingAudio(true);
+      } catch (e) {
+        console.warn('Autoplay waiting for user gesture:', e);
+      }
+    };
+
+    // 1. Attempt immediate autoplay when site opens
+    playMusic();
+
+    // 2. Browser Autoplay Policy Fallback:
+    // If the browser initially blocks unmuted audio before user interaction,
+    // start playing immediately on the very first touch, click, or scroll!
+    const unlockAudio = () => {
+      playMusic();
+      removeListeners();
+    };
+
+    const events = ['click', 'touchstart', 'pointerdown', 'keydown', 'scroll'];
+    const removeListeners = () => {
+      events.forEach((evt) => {
+        window.removeEventListener(evt, unlockAudio, { capture: true });
+      });
+    };
+
+    events.forEach((evt) => {
+      window.addEventListener(evt, unlockAudio, { capture: true, once: true });
+    });
+
+    return () => {
+      unmounted = true;
+      removeListeners();
+    };
+  }, []);
 
   // Sync to localStorage
   useEffect(() => {
