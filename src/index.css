@@ -1,0 +1,384 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  color-scheme: dark;
+  background-color: #000000;
+  color: #FFFFFF;
+}
+
+.font-script {
+  font-family: 'Caveat', cursive;
+}
+
+.font-serif-festive {
+  font-family: 'Playfair Display', serif;
+}
+
+/* Premium Black & White Glassmorphism */
+.glass-panel-bw {
+  background: rgba(10, 10, 10, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9), 0 0 1px 1px rgba(255, 255, 255, 0.08) inset;
+}
+
+.glass-card-bw {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.01) 100%);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card-bw:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 20px 45px -10px rgba(255, 255, 255, 0.15);
+}
+
+/* 3D perspective wrappers */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.perspective-2000 {
+  perspective: 2000px;
+}
+
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
+
+/* Glowing text */
+.text-glow-white {
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 45px rgba(255, 255, 255, 0.4);
+}
+
+.text-glow-silver {
+  text-shadow: 0 0 15px rgba(203, 213, 225, 0.7), 0 0 30px rgba(148, 163, 184, 0.4);
+}
+
+.text-glow-hologram {
+  text-shadow: 0 0 15px rgba(6, 182, 212, 0.8), 0 0 35px rgba(255, 255, 255, 0.6);
+}
+
+/* Hologram Special Effects */
+.hologram-scanlines {
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%,
+    rgba(0, 0, 0, 0.35) 50%
+  ),
+  linear-gradient(
+    90deg,
+    rgba(255, 0, 0, 0.03),
+    rgba(0, 255, 0, 0.01),
+    rgba(0, 255, 0, 0.03)
+  );
+  background-size: 100% 3px, 6px 100%;
+}
+
+.hologram-glow {
+  box-shadow: 0 0 40px rgba(6, 182, 212, 0.35), 0 0 90px rgba(255, 255, 255, 0.15);
+}
+
+.hologram-beam {
+  background: linear-gradient(180deg, rgba(6, 182, 212, 0.25) 0%, rgba(255, 255, 255, 0.12) 50%, transparent 100%);
+  filter: blur(10px);
+}
+
+/* Custom black & white scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #050505;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+/* Shimmer monochrome gradient animation */
+.animate-text-shimmer-bw {
+  background: linear-gradient(90deg, #FFFFFF 0%, #94A3B8 25%, #FFFFFF 50%, #64748B 75%, #FFFFFF 100%);
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: shine 4s linear infinite;
+}
+
+@keyframes shine {
+  to {
+    background-position: 200% center;
+  }
+}
+
+/* Realistic Dark Forest Cake Animations */
+@keyframes flameWobble1 {
+  0%, 100% { transform: scale(1) rotate(-1deg); }
+  50% { transform: scale(1.06, 0.96) rotate(1.5deg); }
+}
+
+@keyframes flameWobble2 {
+  0%, 100% { transform: scale(1.02) rotate(1deg); }
+  50% { transform: scale(0.97, 1.05) rotate(-1.5deg); }
+}
+
+@keyframes flameWobble3 {
+  0%, 100% { transform: scale(0.98) rotate(-1.2deg); }
+  50% { transform: scale(1.04, 0.98) rotate(1.2deg); }
+}
+
+/* Flame Bending when blown by breath */
+@keyframes flameBend {
+  0% { transform: scale(1) rotate(0deg); opacity: 1; }
+  25% { transform: scale(1.15, 0.75) rotate(40deg) translate(8px, -4px); opacity: 0.95; }
+  55% { transform: scale(1.25, 0.45) rotate(65deg) translate(18px, -8px); opacity: 0.8; }
+  80% { transform: scale(0.7, 0.25) rotate(78deg) translate(26px, -12px); opacity: 0.4; }
+  100% { transform: scale(0) rotate(85deg) translate(32px, -15px); opacity: 0; }
+}
+
+/* Wind Gust Breeze sweep */
+@keyframes windGustSweep {
+  0% { transform: translateX(-140px) scaleX(0.4); opacity: 0; }
+  30% { transform: translateX(-20px) scaleX(1.1); opacity: 0.85; }
+  65% { transform: translateX(60px) scaleX(1); opacity: 0.65; }
+  100% { transform: translateX(160px) scaleX(0.5); opacity: 0; }
+}
+
+@keyframes smokeWisp {
+  0% { transform: translateY(0) scaleX(1); opacity: 0.8; }
+  50% { transform: translateY(-14px) scaleX(1.3) rotate(4deg); opacity: 0.55; }
+  100% { transform: translateY(-32px) scaleX(1.9) rotate(-5deg); opacity: 0; }
+}
+
+/* Smooth realistic knife cut slicing through the cake */
+@keyframes knifeSliceThrough {
+  0% { transform: translate(-50%, -70px) rotate(-18deg); opacity: 0; }
+  18% { transform: translate(-50%, 15px) rotate(-12deg); opacity: 1; }
+  45% { transform: translate(-50%, 85px) rotate(-6deg); opacity: 1; }
+  72% { transform: translate(-50%, 155px) rotate(0deg); opacity: 1; }
+  88% { transform: translate(-50%, 168px) rotate(2deg); opacity: 0.9; }
+  100% { transform: translate(-50%, 200px) rotate(4deg); opacity: 0; }
+}
+
+/* Cut slice sliding smoothly outward into position */
+@keyframes sliceSlideOutAnim {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(22px, 18px); }
+}
+
+.animate-flame-wobble-1 {
+  animation: flameWobble1 1.6s ease-in-out infinite;
+}
+
+.animate-flame-wobble-2 {
+  animation: flameWobble2 1.4s ease-in-out infinite;
+}
+
+.animate-flame-wobble-3 {
+  animation: flameWobble3 1.8s ease-in-out infinite;
+}
+
+.animate-flame-bend {
+  animation: flameBend 0.95s cubic-bezier(0.2, 0.8, 0.3, 1) forwards;
+}
+
+.animate-wind-gust {
+  animation: windGustSweep 0.95s cubic-bezier(0.2, 0.7, 0.3, 1) forwards;
+}
+
+.animate-smoke-wisp {
+  animation: smokeWisp 3s ease-out infinite;
+}
+
+.animate-knife-slice {
+  animation: knifeSliceThrough 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+.animate-slice-slide-out {
+  animation: sliceSlideOutAnim 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-pulse-slow {
+  animation: pulse 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Pop-In & Pop-Out Animations */
+@keyframes popInElastic {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) translateY(30px);
+  }
+  65% {
+    opacity: 1;
+    transform: scale(1.06) translateY(-4px);
+  }
+  85% {
+    opacity: 1;
+    transform: scale(0.97) translateY(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes popOutBounce {
+  0% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  25% {
+    opacity: 1;
+    transform: scale(1.06) translateY(-6px);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.25) translateY(-40px);
+  }
+}
+
+.animate-pop-in {
+  animation: popInElastic 0.85s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-pop-out {
+  animation: popOutBounce 0.65s cubic-bezier(0.55, 0.055, 0.675, 0.19) forwards;
+}
+
+
+/* ========================================================
+   PRINT-ONLY STYLES: EXACT SAME SIZE SINGLE-PAGE CERTIFICATE
+   ======================================================== */
+@media print {
+  @page {
+    size: auto;
+    margin: 10mm;
+  }
+
+  html, body {
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    background: #FFFFFF !important;
+    color: #000000 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Force hide all standard UI elements */
+  header,
+  footer,
+  aside,
+  nav,
+  .print\:hidden,
+  .print-hide,
+  button,
+  [data-print-hide="true"] {
+    display: none !important;
+  }
+
+  /* Collapse wrappers cleanly without extra heights or margins */
+  #root,
+  #root > div,
+  main > div,
+  section,
+  .space-y-16,
+  .pb-20,
+  .glass-panel-bw {
+    margin: 0 !important;
+    padding: 0 !important;
+    min-height: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+  }
+
+  /* Center the certificate on the page in its exact size */
+  main {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    height: 100vh !important;
+    max-height: 100vh !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+
+  /* The Certificate: EXACT same size (max-w-2xl / 42rem) as shown on screen */
+  #printable-certificate {
+    display: block !important;
+    position: relative !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: 42rem !important; /* Exact same max-w-2xl size! */
+    margin: auto !important;
+    padding: 2.25rem 2.75rem !important;
+    background: #FFFFFF !important;
+    color: #000000 !important;
+    border: 2px solid #000000 !important;
+    border-radius: 1.5rem !important; /* Exact rounded-3xl */
+    box-shadow: none !important;
+    page-break-inside: avoid !important;
+    page-break-after: avoid !important;
+    page-break-before: avoid !important;
+    break-inside: avoid !important;
+    break-after: avoid !important;
+    break-before: avoid !important;
+    overflow: hidden !important;
+  }
+
+  #printable-certificate * {
+    color: #000000 !important;
+    background: transparent !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+  }
+
+  #printable-certificate .cert-seal {
+    position: absolute !important;
+    top: 1.25rem !important;
+    right: 1.25rem !important;
+    width: 3.5rem !important;
+    height: 3.5rem !important;
+    border: 2px solid #000000 !important;
+    border-radius: 9999px !important;
+    background: #FFFFFF !important;
+    color: #000000 !important;
+  }
+
+  #printable-certificate .cert-seal svg {
+    color: #000000 !important;
+    stroke: #000000 !important;
+  }
+
+  #printable-certificate .cert-name {
+    color: #000000 !important;
+    -webkit-text-fill-color: #000000 !important;
+  }
+
+  #printable-certificate .cert-footer {
+    border-top: none !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+  }
+}
