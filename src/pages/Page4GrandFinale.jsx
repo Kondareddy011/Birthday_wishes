@@ -40,7 +40,7 @@ export default function Page4GrandFinale({
         }
       }
     } catch (e) {}
-    return 'November 15, 2026';
+    return 'November 25, 2026';
   }, [celebrant?.birthDate]);
 
   const handlePopChampagne = () => {

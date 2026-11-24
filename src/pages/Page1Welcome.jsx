@@ -5,10 +5,12 @@ import {
   Gift,
   Layers,
   RotateCcw,
-  Sparkles
+  Sparkles,
+  Clock
 } from 'lucide-react';
 import HolographicPhotoGallery3D from '../components/HolographicPhotoGallery3D';
 import RealisticDarkForestCake from '../components/RealisticDarkForestCake';
+import CountdownSection from '../components/CountdownSection';
 import {
   playBlowCandleSound,
   playCakeSliceSound,
@@ -160,7 +162,7 @@ export default function Page1Welcome({
   };
 
   return (
-    <div className="h-full w-full max-w-6xl mx-auto px-3 sm:px-6 flex flex-col justify-center items-center overflow-hidden py-1 sm:py-2">
+    <div className="w-full max-w-6xl mx-auto px-3 sm:px-6 flex flex-col items-center py-2 sm:py-4 space-y-6">
       {/* ========================================================
           1. LUXURY HERO GREETING:
           POPS IN at starting, stays for ~4.5 seconds, then POPS OUT!
@@ -185,6 +187,12 @@ export default function Page1Welcome({
             <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-4 py-0.5 rounded-full bg-white text-black font-black text-xs font-mono shadow-xl border border-black uppercase tracking-wider">
               AGE {celebrant.age}
             </div>
+          </div>
+
+          {/* Milestone Birthday Badge */}
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 border border-white/20 text-white font-mono text-xs shadow-glow-white mb-2">
+            <Clock className="w-3.5 h-3.5 text-white animate-spin-slow" />
+            <span>Official Birthday: <strong>November 25, 2026</strong></span>
           </div>
 
           {/* Big Bold Headline */}
@@ -230,7 +238,7 @@ export default function Page1Welcome({
       {introStage === 'cake' && (
         <section
           ref={cakeSectionRef}
-          className="glass-panel-bw rounded-3xl p-4 sm:p-6 md:p-8 border border-white/20 shadow-2xl relative overflow-hidden text-center flex flex-col justify-between max-w-5xl lg:max-w-6xl w-full mx-auto my-auto animate-pop-in max-h-[calc(100dvh-5.2rem)]"
+          className="glass-panel-bw rounded-3xl p-4 sm:p-6 md:p-8 border border-white/20 shadow-2xl relative overflow-hidden text-center flex flex-col justify-between max-w-5xl lg:max-w-6xl w-full mx-auto animate-pop-in"
         >
           {/* Top subtle controls row inside cake section */}
           <div className="flex items-center justify-end gap-2 mb-1 text-xs font-mono text-slate-400 flex-shrink-0">
@@ -249,6 +257,19 @@ export default function Page1Welcome({
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif-festive font-black text-white leading-tight">
               Happy Birthday, <span className="animate-text-shimmer-bw">{celebrant.name}</span>! 🎂
             </h2>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 border border-white/20 text-white font-mono text-xs shadow-glow-white mx-auto my-2">
+              <Clock className="w-3.5 h-3.5 text-white animate-spin-slow" />
+              <span>Official Birthday: <strong>November 25, 2026</strong></span>
+              <span className="text-zinc-500">•</span>
+              <button
+                onClick={() => {
+                  document.getElementById('countdown-section')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="text-slate-300 hover:text-white underline decoration-dotted transition-colors"
+              >
+                View Live Countdown ↓
+              </button>
+            </div>
             <p className="text-xs sm:text-sm md:text-base text-slate-300 max-w-xl mx-auto font-mono mt-1">
               {!candlesBlown && `Make a silent wish, then blow out your ${celebrant.age} milestone candles.`}
               {candlesBlown && !cakeCut && "The candles are blown! Now slice the rich Dark Forest cake with the silver ceremonial knife."}
@@ -334,7 +355,14 @@ export default function Page1Welcome({
       )}
 
       {/* ========================================================
-          3. 3D HOLOGRAPHIC PHOTO GALLERY MODAL
+          3. OFFICIAL 25TH NOVEMBER LUXURY COUNTDOWN SECTION
+         ======================================================== */}
+      <div id="countdown-section" className="w-full">
+        <CountdownSection celebrant={celebrant} />
+      </div>
+
+      {/* ========================================================
+          4. 3D HOLOGRAPHIC PHOTO GALLERY MODAL
          ======================================================== */}
       <HolographicPhotoGallery3D
         photos={photos}

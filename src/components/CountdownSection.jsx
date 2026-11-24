@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
-import { Clock, Calendar, Sparkles, PartyPopper, Bell, Check } from 'lucide-react';
-import { playPartyFanfare } from '../utils/soundEffects';
+import { Clock, Calendar, Sparkles, PartyPopper, Bell, Check, Heart } from 'lucide-react';
+import { playPartyFanfare, playUnboxChime } from '../utils/soundEffects';
 
-export default function CountdownSection({ celebrant, onUpdateCelebrant }) {
+export default function CountdownSection({ celebrant }) {
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -16,37 +16,46 @@ export default function CountdownSection({ celebrant, onUpdateCelebrant }) {
 
   useEffect(() => {
     function calculateTime() {
-      const target = new Date(celebrant.birthDate).getTime();
-      const now = new Date().getTime();
-      const diff = target - now;
+      const now = new Date();
+      const currentYear = now.getFullYear();
 
-      if (isNaN(target)) {
-        return;
+      // Check if today is the birthday (Nov 25th in local time)
+      // Note: JavaScript months are 0-indexed (10 = November)
+      const isNov25 = now.getMonth() === 10 && now.getDate() === 25;
+
+      let target = new Date(celebrant?.birthDate || `${currentYear}-11-25T00:00:00`);
+      if (isNaN(target.getTime())) {
+        target = new Date(`${currentYear}-11-25T00:00:00`);
       }
 
-      // Check if it's the birthday today (within 24 hours of target date, or day matches)
-      const targetDateObj = new Date(celebrant.birthDate);
-      const nowDateObj = new Date();
-      const isSameMonthAndDay =
-        targetDateObj.getMonth() === nowDateObj.getMonth() &&
-        targetDateObj.getDate() === nowDateObj.getDate();
+      const diff = target.getTime() - now.getTime();
 
-      if (diff <= 0 || isSameMonthAndDay) {
+      // If it is Nov 25th today, activate the full celebration!
+      if (isNov25) {
         setTimeLeft({
           days: 0,
           hours: 0,
           minutes: 0,
           seconds: 0,
           isToday: true,
-          hasPassed: diff <= -86400000 // passed more than 24h
+          hasPassed: false
         });
         return;
       }
 
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      const minutes = Math.floor((diff / 1000 / 60) % 60);
-      const seconds = Math.floor((diff / 1000) % 60);
+      // If past Nov 25 this year, target next year's Nov 25
+      let activeDiff = diff;
+      let targetHasPassed = false;
+      if (diff <= 0) {
+        targetHasPassed = true;
+        const nextTarget = new Date(`${currentYear + 1}-11-25T00:00:00`);
+        activeDiff = nextTarget.getTime() - now.getTime();
+      }
+
+      const days = Math.max(0, Math.floor(activeDiff / (1000 * 60 * 60 * 24)));
+      const hours = Math.max(0, Math.floor((activeDiff / (1000 * 60 * 60)) % 24));
+      const minutes = Math.max(0, Math.floor((activeDiff / 1000 / 60) % 60));
+      const seconds = Math.max(0, Math.floor((activeDiff / 1000) % 60));
 
       setTimeLeft({
         days,
@@ -54,122 +63,119 @@ export default function CountdownSection({ celebrant, onUpdateCelebrant }) {
         minutes,
         seconds,
         isToday: false,
-        hasPassed: false
+        hasPassed: targetHasPassed
       });
     }
 
     calculateTime();
     const interval = setInterval(calculateTime, 1000);
     return () => clearInterval(interval);
-  }, [celebrant.birthDate]);
+  }, [celebrant?.birthDate]);
 
-  const handleCelebrateNow = () => {
+  const handleCelebrate = () => {
     playPartyFanfare();
     confetti({
-      particleCount: 100,
-      spread: 90,
+      particleCount: 120,
+      spread: 100,
       origin: { y: 0.6 },
-      colors: ['#EC4899', '#8B5CF6', '#FACC15', '#10B981', '#06B6D4']
+      colors: ['#FFFFFF', '#E2E8F0', '#CBD5E1', '#94A3B8', '#F43F5E']
     });
-  };
-
-  const setBirthdayToToday = () => {
-    const today = new Date().toISOString().slice(0, 16);
-    if (onUpdateCelebrant) {
-      onUpdateCelebrant({ ...celebrant, birthDate: today });
-    }
-  };
-
-  const setBirthdayToFuture = () => {
-    const future = new Date(Date.now() + 3 * 86400000 + 5 * 3600000).toISOString().slice(0, 16);
-    if (onUpdateCelebrant) {
-      onUpdateCelebrant({ ...celebrant, birthDate: future });
-    }
+    setTimeout(() => {
+      confetti({
+        particleCount: 80,
+        spread: 120,
+        origin: { x: 0.3, y: 0.5 },
+        colors: ['#FFFFFF', '#F8FAFC', '#E2E8F0']
+      });
+      confetti({
+        particleCount: 80,
+        spread: 120,
+        origin: { x: 0.7, y: 0.5 },
+        colors: ['#FFFFFF', '#CBD5E1', '#94A3B8']
+      });
+    }, 250);
   };
 
   const handleAddToCalendar = () => {
-    const title = encodeURIComponent(`🎂 ${celebrant.name}'s Birthday Celebration!`);
-    const details = encodeURIComponent(`Don't forget to send wishes and celebrate with ${celebrant.name}!`);
-    const dateStr = new Date(celebrant.birthDate).toISOString().replace(/-|:|\.\d\d\d/g, "");
-    const gcalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${dateStr}/${dateStr}&details=${details}`;
+    playUnboxChime();
+    const name = celebrant?.name || 'Lakshmi';
+    const age = celebrant?.age || 22;
+    const title = encodeURIComponent(`🎂 Happy ${age}nd Birthday, ${name}!`);
+    const details = encodeURIComponent(`Celebrating ${name}'s ${age}nd milestone birthday! Blow candles, slice cake, and cherish memories together! ❤️`);
+    const dateStr = "20261125T000000";
+    const dateEnd = "20261125T235959";
+    const gcalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${dateStr}/${dateEnd}&details=${details}`;
     window.open(gcalUrl, '_blank');
     setCopiedCal(true);
     setTimeout(() => setCopiedCal(false), 3000);
   };
 
   const timeBlocks = [
-    { label: 'DAYS', value: timeLeft.days, color: 'from-pink-500 to-rose-600' },
-    { label: 'HOURS', value: timeLeft.hours, color: 'from-purple-500 to-indigo-600' },
-    { label: 'MINUTES', value: timeLeft.minutes, color: 'from-cyan-400 to-blue-600' },
-    { label: 'SECONDS', value: timeLeft.seconds, color: 'from-amber-400 to-yellow-600' }
+    { label: 'DAYS', value: timeLeft.days },
+    { label: 'HOURS', value: timeLeft.hours },
+    { label: 'MINUTES', value: timeLeft.minutes },
+    { label: 'SECONDS', value: timeLeft.seconds }
   ];
 
   return (
-    <section className="relative py-16 px-4 sm:px-6 max-w-5xl mx-auto">
-      {/* Decorative backdrop */}
-      <div className="absolute inset-0 bg-gradient-to-r from-pink-500/10 via-purple-500/10 to-amber-500/10 rounded-3xl blur-2xl -z-10" />
+    <section className="relative py-12 px-3 sm:px-6 max-w-5xl mx-auto w-full print:hidden">
+      {/* Subtle ambient backglow */}
+      <div className="absolute inset-0 bg-white/5 rounded-3xl blur-3xl -z-10 pointer-events-none" />
 
-      <div className="glass-panel rounded-3xl p-6 sm:p-10 border border-white/10 shadow-2xl relative overflow-hidden">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8">
+      <div className="bg-zinc-950/85 backdrop-blur-2xl rounded-3xl p-6 sm:p-10 border border-white/20 shadow-2xl relative overflow-hidden">
+        {/* Subtle decorative glow orb */}
+        <div className="absolute -top-24 -right-24 w-72 h-72 bg-white/5 rounded-full blur-3xl pointer-events-none" />
+
+        {/* Section Header */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8 text-center sm:text-left">
           <div>
-            <div className="flex items-center gap-2 text-pink-400 text-sm font-bold uppercase tracking-wider mb-1">
-              <Clock className="w-4 h-4 animate-spin-slow" />
-              <span>Official Birthday Countdown</span>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 border border-white/20 text-white text-xs font-mono font-bold uppercase tracking-wider mb-2 shadow-glow-white">
+              <Clock className="w-3.5 h-3.5 text-white animate-spin-slow" />
+              <span>Official 25th November Milestone Countdown</span>
             </div>
-            <h3 className="text-2xl sm:text-3xl font-extrabold text-white">
+            <h3 className="text-2xl sm:text-4xl font-serif-festive font-black text-white leading-tight">
               {timeLeft.isToday ? (
-                <span className="text-glow-pink">🎂 The Big Day is HERE! Party Time! 🎉</span>
+                <span className="animate-text-shimmer-bw">🎂 THE BIG DAY IS HERE! HAPPY 22ND BIRTHDAY! 🎉</span>
               ) : (
-                <span>Counting Down to the Celebration ⏳</span>
+                <span>Counting Down to November 25th ⏳</span>
               )}
             </h3>
+            <p className="text-xs sm:text-sm font-mono text-slate-400 mt-1 max-w-xl">
+              {timeLeft.isToday
+                ? `Today is November 25th! The wait is over — celebrating ${celebrant?.name || 'Lakshmi'}'s unforgettable 22nd milestone!`
+                : `Every second brings us closer to midnight, November 25th — celebrating 22 magnificent years of ${celebrant?.name || 'Lakshmi'}.`}
+            </p>
           </div>
 
-          {/* Quick Simulation Toggles */}
-          <div className="flex items-center gap-2 bg-slate-900/80 p-1.5 rounded-2xl border border-white/10 text-xs font-semibold">
-            <button
-              onClick={setBirthdayToToday}
-              className={`px-3 py-1.5 rounded-xl transition-all ${
-                timeLeft.isToday
-                  ? 'bg-pink-500 text-white shadow-md'
-                  : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              🎉 Today Mode
-            </button>
-            <button
-              onClick={setBirthdayToFuture}
-              className={`px-3 py-1.5 rounded-xl transition-all ${
-                !timeLeft.isToday
-                  ? 'bg-purple-600 text-white shadow-md'
-                  : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              ⏳ Countdown Mode
-            </button>
-          </div>
+          {/* Celebration / Confetti Quick Trigger */}
+          <button
+            onClick={handleCelebrate}
+            className="px-5 py-2.5 rounded-full bg-white text-black font-black text-xs font-mono uppercase tracking-wider shadow-lg hover:scale-105 active:scale-95 transition-all flex items-center gap-2 shadow-glow-white flex-shrink-0"
+          >
+            <PartyPopper className="w-4 h-4 text-black" />
+            <span>Launch Confetti 🎊</span>
+          </button>
         </div>
 
-        {/* Countdown Digits or Party Banner */}
+        {/* 1. Countdown Digits (Active before Nov 25) */}
         {!timeLeft.isToday ? (
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 mb-8">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-6 mb-8">
             {timeBlocks.map((block) => (
               <div
                 key={block.label}
-                className="relative group perspective-1000"
+                className="group relative perspective-1000"
               >
-                <div className="glass-card rounded-2xl p-5 text-center border border-white/10 group-hover:border-pink-500/50 transition-all duration-300 transform group-hover:-translate-y-1 shadow-3d-card">
-                  {/* Glowing background behind number */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${block.color} opacity-10 rounded-2xl blur-lg group-hover:opacity-20 transition-opacity`} />
+                <div className="rounded-2xl p-4 sm:p-6 text-center border border-white/15 bg-black/70 group-hover:border-white/50 transition-all duration-300 transform group-hover:-translate-y-1 shadow-2xl relative overflow-hidden">
+                  {/* Subtle inner card gradient */}
+                  <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
 
                   {/* Digit */}
-                  <span className="relative z-10 block font-mono text-4xl sm:text-6xl font-black text-white tracking-tight drop-shadow-md">
+                  <span className="relative z-10 block font-mono text-4xl sm:text-6xl md:text-7xl font-black text-white tracking-tight drop-shadow-lg">
                     {String(block.value).padStart(2, '0')}
                   </span>
 
                   {/* Label */}
-                  <span className="relative z-10 text-[11px] sm:text-xs font-extrabold text-slate-400 tracking-widest mt-2 block group-hover:text-pink-300 transition-colors">
+                  <span className="relative z-10 text-[10px] sm:text-xs font-mono font-extrabold text-zinc-400 tracking-widest mt-2 block group-hover:text-white transition-colors uppercase">
                     {block.label}
                   </span>
                 </div>
@@ -177,45 +183,50 @@ export default function CountdownSection({ celebrant, onUpdateCelebrant }) {
             ))}
           </div>
         ) : (
-          /* Birthday is Today Banner */
-          <div className="p-8 rounded-2xl bg-gradient-to-r from-pink-500/20 via-purple-500/20 to-amber-500/20 border border-pink-500/40 text-center mb-8 relative overflow-hidden">
-            <div className="absolute top-2 right-2 text-3xl animate-bounce">🎈</div>
-            <div className="absolute bottom-2 left-2 text-3xl animate-bounce">🥳</div>
-            <h4 className="text-3xl sm:text-4xl font-black text-white mb-2">
-              HAPPY BIRTHDAY, {celebrant.name.toUpperCase()}! 🌟
+          /* 2. Birthday Today Banner (Active on Nov 25) */
+          <div className="p-8 sm:p-12 rounded-2xl bg-gradient-to-b from-white/15 via-white/5 to-transparent border border-white/30 text-center mb-8 relative overflow-hidden">
+            <div className="absolute top-3 left-4 text-3xl animate-bounce">🎈</div>
+            <div className="absolute top-3 right-4 text-3xl animate-bounce [animation-delay:0.2s]">✨</div>
+            <div className="absolute bottom-3 left-4 text-3xl animate-bounce [animation-delay:0.4s]">🥳</div>
+            <div className="absolute bottom-3 right-4 text-3xl animate-bounce [animation-delay:0.6s]">🥂</div>
+
+            <span className="inline-block px-4 py-1 rounded-full bg-white text-black font-black text-xs font-mono uppercase tracking-widest mb-3 shadow-glow-white">
+              🌟 Today • November 25, 2026 🌟
+            </span>
+            <h4 className="text-3xl sm:text-5xl md:text-6xl font-serif-festive font-black text-white mb-3">
+              HAPPY BIRTHDAY, {celebrant?.name?.toUpperCase() || 'LAKSHMI'}!
             </h4>
-            <p className="text-slate-300 max-w-lg mx-auto mb-6 text-sm sm:text-base">
-              The wait is over! Today is all about honoring you, sharing endless laughs, and creating core memories that will last a lifetime.
+            <p className="text-slate-300 max-w-xl mx-auto mb-6 text-sm sm:text-base font-serif italic">
+              "May this 22nd milestone year shower you with boundless joy, glowing success, unconditional love, and laughter that echoes forever."
             </p>
             <button
-              onClick={handleCelebrateNow}
-              className="px-8 py-3.5 rounded-full bg-gradient-to-r from-pink-500 via-rose-500 to-amber-400 text-white font-extrabold text-base shadow-xl shadow-pink-500/30 hover:scale-105 active:scale-95 transition-all inline-flex items-center gap-2.5"
+              onClick={handleCelebrate}
+              className="px-8 py-4 rounded-full bg-white text-black font-black text-sm uppercase tracking-wider shadow-2xl hover:scale-105 active:scale-95 transition-all inline-flex items-center gap-3 shadow-glow-white"
             >
               <PartyPopper className="w-5 h-5" />
-              <span>Fire Celebration Confetti! 🎊</span>
+              <span>Celebrate With Confetti &amp; Fanfare! 🎊</span>
             </button>
           </div>
         )}
 
-        {/* Footer info & Calendar sync */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-slate-800 text-sm text-slate-400">
+        {/* Footer info & Google Calendar Sync */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-white/10 text-xs font-mono text-zinc-400">
           <div className="flex items-center gap-2">
-            <Calendar className="w-4 h-4 text-pink-400" />
+            <Calendar className="w-4 h-4 text-white" />
             <span>
-              Target Date: <strong className="text-slate-200">{new Date(celebrant.birthDate).toLocaleString(undefined, { dateStyle: 'full', timeStyle: 'short' })}</strong>
+              Target Birthday: <strong className="text-white">Wednesday, November 25, 2026</strong> (Age {celebrant?.age || 22})
             </span>
           </div>
 
           <button
             onClick={handleAddToCalendar}
-            className="px-4 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 text-slate-200 text-xs font-semibold flex items-center gap-2 border border-slate-700 transition-colors"
+            className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-mono text-xs font-bold flex items-center gap-2 border border-white/20 transition-all shadow-sm hover:scale-102"
           >
-            {copiedCal ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Bell className="w-3.5 h-3.5 text-amber-400" />}
-            <span>{copiedCal ? 'Opening Google Calendar...' : 'Remind Me / Add to Calendar'}</span>
+            {copiedCal ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Bell className="w-3.5 h-3.5 text-white" />}
+            <span>{copiedCal ? 'Opening Google Calendar...' : 'Add to Google Calendar 📅'}</span>
           </button>
         </div>
       </div>
     </section>
   );
 }
-

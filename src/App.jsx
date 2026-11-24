@@ -80,6 +80,11 @@ export default function App() {
       localStorage.setItem('bday_migrated_lakshmi_v4', 'true');
       localStorage.setItem('bday_celebrant', JSON.stringify({ ...base, age: 22 }));
     }
+    if (!localStorage.getItem('bday_migrated_nov25') || !base.birthDate || !base.birthDate.includes('11-25')) {
+      base.birthDate = defaultCelebrant.birthDate;
+      localStorage.setItem('bday_migrated_nov25', 'true');
+      localStorage.setItem('bday_celebrant', JSON.stringify({ ...base, birthDate: defaultCelebrant.birthDate }));
+    }
 
     if (urlName) base = { ...base, name: urlName };
     if (urlAge) base = { ...base, age: Number(urlAge) };
@@ -242,9 +247,7 @@ export default function App() {
   };
 
   return (
-    <div className={`bg-black text-white relative selection:bg-white selection:text-black font-sans antialiased ${
-      currentPage === 1 ? 'h-[100dvh] overflow-hidden' : 'min-h-screen'
-    }`}>
+    <div className="bg-black text-white relative selection:bg-white selection:text-black font-sans antialiased min-h-screen">
       {/* Floating Interactive Balloons with rich, vivid celebration colors */}
       <FloatingBalloons />
 
@@ -261,7 +264,7 @@ export default function App() {
       {/* DYNAMIC MULTI-PAGE VIEW (4 CHAPTERS) */}
       <main className={`relative z-10 ${
         currentPage === 1
-          ? 'h-[100dvh] pt-16 sm:pt-18 flex flex-col justify-center overflow-hidden'
+          ? 'min-h-screen pt-20 pb-20 flex flex-col justify-start'
           : 'min-h-[70vh] pt-20'
       }`}>
         {currentPage === 1 && (

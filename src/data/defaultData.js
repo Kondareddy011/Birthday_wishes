@@ -3,7 +3,7 @@ export const defaultCelebrant = {
   name: "Lakshmi",
   nickname: "Lakshmi",
   age: 22,
-  birthDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000 + 4 * 60 * 60 * 1000).toISOString().slice(0, 16),
+  birthDate: "2026-11-25T00:00:00",
   avatarUrl: "/photoes/IMG20260206161511.jpg",
   avatarPosition: "44% 24%",
   headline: "Celebrating 22 Years of Grace, Radiance & Excellence",
