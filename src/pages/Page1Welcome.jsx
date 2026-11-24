@@ -279,13 +279,13 @@ export default function Page1Welcome({
               <button
                 onClick={handleBlowCandles}
                 disabled={isBlowing}
-                className={`px-8 py-3 sm:px-12 sm:py-4 rounded-full font-black text-xs sm:text-sm md:text-base tracking-wider uppercase shadow-xl transition-all flex items-center gap-2.5 shadow-glow-white ${
+                className={`px-5 py-2.5 sm:px-8 sm:py-3 rounded-full font-black text-xs sm:text-sm tracking-wider uppercase shadow-xl transition-all flex items-center gap-2 shadow-glow-white ${
                   isBlowing
                     ? 'bg-slate-200 text-black scale-95 opacity-90'
                     : 'bg-white text-black hover:scale-105 active:scale-95'
                 }`}
               >
-                <Wind className={`w-4 h-4 sm:w-5 sm:h-5 text-black ${isBlowing ? 'animate-spin' : ''}`} />
+                <Wind className={`w-4 h-4 sm:w-4.5 sm:h-4.5 text-black ${isBlowing ? 'animate-spin' : ''}`} />
                 <span>{isBlowing ? 'Blowing Out Candles... 🌬️' : 'Blow Out Candles & Make a Wish 🕯️'}</span>
               </button>
             )}
@@ -295,13 +295,13 @@ export default function Page1Welcome({
               <button
                 onClick={handleCutCake}
                 disabled={isCuttingAnimation}
-                className={`px-8 py-3 sm:px-12 sm:py-4 rounded-full bg-gradient-to-r from-white via-slate-100 to-zinc-300 text-black font-black text-xs sm:text-sm md:text-base tracking-wider uppercase shadow-xl transition-all flex items-center gap-2.5 shadow-glow-white ${
+                className={`px-5 py-2.5 sm:px-8 sm:py-3 rounded-full bg-gradient-to-r from-white via-slate-100 to-zinc-300 text-black font-black text-xs sm:text-sm tracking-wider uppercase shadow-xl transition-all flex items-center gap-2 shadow-glow-white ${
                   isCuttingAnimation
                     ? 'scale-95 opacity-90'
                     : 'hover:scale-105 active:scale-95 animate-pulse'
                 }`}
               >
-                <span>{isCuttingAnimation ? '🔪 Ceremonial Knife Slicing...' : '🔪 Slice the Birthday Cake!'}</span>
+                <span>{isCuttingAnimation ? '🔪 Slicing...' : '🔪 Slice the Birthday Cake!'}</span>
               </button>
             )}
 
@@ -311,17 +311,17 @@ export default function Page1Welcome({
                 {/* THE REVEALED SURPRISE GIFT BUTTON */}
                 <button
                   onClick={handleOpenSurpriseGift}
-                  className="px-8 py-3.5 sm:px-12 sm:py-4.5 rounded-full bg-white text-black font-black text-sm sm:text-base md:text-lg tracking-wider uppercase shadow-2xl hover:scale-105 active:scale-95 transition-all flex items-center gap-3 shadow-glow-white border-2 border-white group"
+                  className="px-5 py-2.5 sm:px-8 sm:py-3 rounded-full bg-white text-black font-black text-xs sm:text-sm tracking-wider uppercase shadow-xl hover:scale-105 active:scale-95 transition-all flex items-center gap-2 shadow-glow-white border border-white group"
                 >
-                  <Gift className="w-5 h-5 sm:w-6 sm:h-6 text-black group-hover:rotate-12 transition-transform" />
-                  <span>🎁 Open 3D Holographic Surprise Gift</span>
-                  <Layers className="w-4 h-4 sm:w-5 sm:h-5 text-black animate-spin-slow" />
+                  <Gift className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-black group-hover:rotate-12 transition-transform" />
+                  <span>Open 3D Holographic Gift</span>
+                  <Layers className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-black animate-spin-slow" />
                 </button>
 
                 {/* Interactive Reset / Replay Ceremony */}
                 <button
                   onClick={handleResetCakeCeremony}
-                  className="text-xs font-mono text-slate-400 hover:text-white flex items-center gap-1.5 transition-colors underline decoration-dotted"
+                  className="text-[11px] sm:text-xs font-mono text-slate-400 hover:text-white flex items-center gap-1.5 transition-colors underline decoration-dotted"
                   title="Relight candles and cut again"
                 >
                   <RotateCcw className="w-3.5 h-3.5" />
