@@ -155,21 +155,22 @@ export default function HolographicPhotoGallery3D({ photos = [], isOpen, onClose
       </div>
 
       {/* TOP HUD BAR */}
-      <div className="w-full max-w-6xl mx-auto flex items-center justify-between z-30 pt-2 sm:pt-3 pb-3 border-b border-white/10 flex-shrink-0">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-white shadow-glow-white">
-            <Layers className="w-4 h-4 animate-spin-slow" />
+      <div className="w-full max-w-6xl mx-auto flex items-center justify-between z-30 pt-1 sm:pt-3 pb-2 sm:pb-3 border-b border-white/10 flex-shrink-0 gap-2">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+          <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-white shadow-glow-white flex-shrink-0">
+            <Layers className="w-3.5 h-3.5 sm:w-4 sm:h-4 animate-spin-slow" />
           </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs sm:text-sm font-black uppercase tracking-widest text-white">
-                3D Holographic Memory Projection
+          <div className="min-w-0">
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <span className="text-[11px] sm:text-xs md:text-sm font-black uppercase tracking-wider sm:tracking-widest text-white truncate">
+                <span className="sm:hidden">3D Memories</span>
+                <span className="hidden sm:inline">3D Holographic Memory Projection</span>
               </span>
-              <span className="px-2 py-0.5 rounded-full bg-white/10 border border-white/30 text-[10px] font-mono font-bold text-white">
-                {activeIndex + 1} / {total}
+              <span className="px-1.5 py-0.5 rounded-full bg-white/10 border border-white/30 text-[9px] sm:text-[10px] font-mono font-bold text-white flex-shrink-0">
+                {activeIndex + 1}/{total}
               </span>
             </div>
-            <span className="text-[11px] font-mono text-slate-400 hidden sm:inline">
+            <span className="text-[10px] font-mono text-zinc-400 hidden sm:block truncate">
               {isPopped
                 ? 'Photo popped up • Click outside or ✕ to close and return to orbit'
                 : 'Click any photo to pop it up • Swipe or use arrows to navigate'}
@@ -178,46 +179,46 @@ export default function HolographicPhotoGallery3D({ photos = [], isOpen, onClose
         </div>
 
         {/* View Toggle & Close */}
-        <div className="flex items-center gap-2 sm:gap-3">
-          {/* View Mode Toggle: 3D Orbit vs 3D Grid */}
-          <div className="flex items-center p-1 rounded-xl bg-black/60 border border-white/15">
+        <div className="flex items-center gap-1.5 sm:gap-3 flex-shrink-0">
+          {/* View Mode Toggle: 3D Orbit vs 3D Wall */}
+          <div className="flex items-center p-0.5 sm:p-1 rounded-lg sm:rounded-xl bg-black/60 border border-white/15">
             <button
               onClick={() => {
                 setViewMode('orbit');
                 if (selectedPhoto) setSelectedPhoto(null);
               }}
-              className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold flex items-center gap-1.5 transition-all ${viewMode === 'orbit'
+              className={`px-2 sm:px-2.5 py-1 rounded-md sm:rounded-lg text-[10px] sm:text-xs font-mono font-bold flex items-center gap-1 transition-all ${viewMode === 'orbit'
                 ? 'bg-white text-black shadow-md'
-                : 'text-slate-400 hover:text-white'
+                : 'text-zinc-400 hover:text-white'
                 }`}
               title="3D Curved Orbit View"
             >
-              <RotateCw className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">3D Orbit</span>
+              <RotateCw className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+              <span>Orbit</span>
             </button>
             <button
               onClick={() => {
                 setViewMode('grid');
                 if (selectedPhoto) setSelectedPhoto(null);
               }}
-              className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold flex items-center gap-1.5 transition-all ${viewMode === 'grid'
+              className={`px-2 sm:px-2.5 py-1 rounded-md sm:rounded-lg text-[10px] sm:text-xs font-mono font-bold flex items-center gap-1 transition-all ${viewMode === 'grid'
                 ? 'bg-white text-black shadow-md'
-                : 'text-slate-400 hover:text-white'
+                : 'text-zinc-400 hover:text-white'
                 }`}
-              title="View all 31 memories in 3D Wall"
+              title="View all memories in 3D Wall"
             >
-              <Grid className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">3D Wall</span>
+              <Grid className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+              <span>Wall</span>
             </button>
             <button
               onClick={() => setAutoRotate(!autoRotate)}
-              className={`px-2 py-1 rounded-lg text-xs font-mono font-bold flex items-center gap-1 transition-all ${autoRotate
+              className={`px-1.5 sm:px-2 py-1 rounded-md sm:rounded-lg text-[10px] sm:text-xs font-mono font-bold flex items-center gap-1 transition-all ${autoRotate
                 ? 'bg-white/20 text-white'
-                : 'text-slate-400 hover:text-white'
+                : 'text-zinc-400 hover:text-white'
                 }`}
               title={autoRotate ? 'Pause Orbit' : 'Resume Auto-Orbit'}
             >
-              {autoRotate ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
+              {autoRotate ? <Pause className="w-3 h-3 sm:w-3.5 sm:h-3.5" /> : <Play className="w-3 h-3 sm:w-3.5 sm:h-3.5" />}
               <span className="hidden md:inline">{autoRotate ? 'Orbiting' : 'Paused'}</span>
             </button>
 
@@ -230,21 +231,21 @@ export default function HolographicPhotoGallery3D({ photos = [], isOpen, onClose
                   return 1400;
                 });
               }}
-              className="px-2 py-1 rounded-lg text-xs font-mono font-bold flex items-center gap-1 text-amber-300 hover:text-white bg-amber-400/10 hover:bg-amber-400/20 transition-all border border-amber-400/20"
+              className="px-1.5 sm:px-2 py-1 rounded-md sm:rounded-lg text-[10px] sm:text-xs font-mono font-bold flex items-center gap-1 text-amber-300 hover:text-white bg-amber-400/10 hover:bg-amber-400/20 transition-all border border-amber-400/20"
               title="Toggle Photo Movement Speed"
             >
-              <Zap className="w-3 h-3 text-amber-400 animate-pulse" />
-              <span>{orbitSpeed === 900 ? 'Turbo (0.9s)' : orbitSpeed === 1400 ? 'Fast (1.4s)' : 'Normal (2.4s)'}</span>
+              <Zap className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-amber-400 animate-pulse" />
+              <span>{orbitSpeed === 900 ? '0.9s' : orbitSpeed === 1400 ? '1.4s' : '2.4s'}</span>
             </button>
           </div>
 
           {/* Close Button */}
           <button
             onClick={onClose}
-            className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center border border-white/20 transition-all active:scale-95"
+            className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center border border-white/20 transition-all active:scale-95 flex-shrink-0"
             title="Close Hologram View"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
         </div>
       </div>
@@ -265,10 +266,10 @@ export default function HolographicPhotoGallery3D({ photos = [], isOpen, onClose
               e.stopPropagation();
               handlePrev();
             }}
-            className="absolute left-2 sm:left-6 z-40 w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-black/85 hover:bg-white hover:text-black text-white border border-white/30 flex items-center justify-center transition-all shadow-2xl active:scale-95"
+            className="absolute left-1 sm:left-4 z-40 w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-black/85 hover:bg-white hover:text-black text-white border border-white/30 flex items-center justify-center transition-all shadow-2xl active:scale-95"
             title="Previous Memory (Left Arrow)"
           >
-            <ChevronLeft className="w-6 h-6" />
+            <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
 
           {/* Next Button (Right 3D Float) */}
@@ -277,16 +278,16 @@ export default function HolographicPhotoGallery3D({ photos = [], isOpen, onClose
               e.stopPropagation();
               handleNext();
             }}
-            className="absolute right-2 sm:right-6 z-40 w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-black/85 hover:bg-white hover:text-black text-white border border-white/30 flex items-center justify-center transition-all shadow-2xl active:scale-95"
+            className="absolute right-1 sm:right-4 z-40 w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-black/85 hover:bg-white hover:text-black text-white border border-white/30 flex items-center justify-center transition-all shadow-2xl active:scale-95"
             title="Next Memory (Right Arrow)"
           >
-            <ChevronRight className="w-6 h-6" />
+            <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
 
           {/* 3D SCENE STAGE */}
           <div
-            className="relative w-full max-w-5xl h-[440px] sm:h-[500px] flex items-center justify-center overflow-visible"
-            style={{ perspective: '1300px' }}
+            className="relative w-full max-w-5xl h-[360px] sm:h-[460px] md:h-[500px] flex items-center justify-center overflow-visible"
+            style={{ perspective: '1200px' }}
           >
             {photos.map((photo, index) => {
               // Circular offset relative to activeIndex
@@ -329,19 +330,19 @@ export default function HolographicPhotoGallery3D({ photos = [], isOpen, onClose
                 scale = 1;
                 opacity = 1;
               } else if (Math.abs(offset) === 1) {
-                translateX = offset * (window.innerWidth < 640 ? 150 : 260);
+                translateX = offset * (window.innerWidth < 480 ? 115 : window.innerWidth < 640 ? 150 : 260);
                 translateZ = -90;
                 rotateY = offset * -32;
                 scale = 0.86;
                 opacity = 0.85;
               } else if (Math.abs(offset) === 2) {
-                translateX = offset * (window.innerWidth < 640 ? 250 : 440);
+                translateX = offset * (window.innerWidth < 480 ? 190 : window.innerWidth < 640 ? 250 : 440);
                 translateZ = -200;
                 rotateY = offset * -46;
                 scale = 0.72;
                 opacity = 0.55;
               } else {
-                translateX = offset * (window.innerWidth < 640 ? 330 : 580);
+                translateX = offset * (window.innerWidth < 480 ? 250 : window.innerWidth < 640 ? 330 : 580);
                 translateZ = -320;
                 rotateY = offset * -58;
                 scale = 0.6;
@@ -370,7 +371,7 @@ export default function HolographicPhotoGallery3D({ photos = [], isOpen, onClose
                 >
                   {/* Holographic Frame Card: Explicit responsive bounds with no cutting */}
                   <div
-                    className={`w-64 sm:w-80 h-[380px] sm:h-[440px] rounded-3xl p-3 bg-black/85 backdrop-blur-xl border ${isCenter ? activeTheme.border : 'border-white/20'
+                    className={`w-[220px] xs:w-[250px] sm:w-72 md:w-80 h-[320px] sm:h-[400px] md:h-[440px] rounded-2xl sm:rounded-3xl p-2.5 sm:p-3 bg-black/85 backdrop-blur-xl border ${isCenter ? activeTheme.border : 'border-white/20'
                       } transition-all duration-300 flex flex-col justify-between relative overflow-hidden group ${isCenter ? 'shadow-2xl shadow-glow-white ring-1 ring-white/40' : 'hover:border-white/50'
                       }`}
                     style={{
@@ -446,43 +447,43 @@ export default function HolographicPhotoGallery3D({ photos = [], isOpen, onClose
                ======================================================== */}
             {isPopped && selectedPhoto && (
               <div
-                className="relative z-50 w-full max-w-lg sm:max-w-2xl h-[440px] sm:h-[500px] flex flex-col justify-between p-4 sm:p-5 rounded-3xl bg-black/90 backdrop-blur-3xl border-2 border-white shadow-2xl shadow-glow-white animate-in zoom-in-95 duration-300"
+                className="relative z-50 w-full max-w-[94vw] sm:max-w-xl md:max-w-2xl h-[70vh] sm:h-[460px] md:h-[500px] max-h-[520px] flex flex-col justify-between p-3 sm:p-5 rounded-2xl sm:rounded-3xl bg-black/90 backdrop-blur-3xl border-2 border-white shadow-2xl shadow-glow-white animate-in zoom-in-95 duration-300"
                 onClick={(e) => e.stopPropagation()}
                 style={{
                   boxShadow: `0 0 70px ${activeTheme.glow}`,
                 }}
               >
                 {/* Scanlines Effect */}
-                <div className="absolute inset-0 hologram-scanlines pointer-events-none opacity-30 rounded-3xl" />
+                <div className="absolute inset-0 hologram-scanlines pointer-events-none opacity-30 rounded-2xl sm:rounded-3xl" />
 
                 {/* Laser Corner Brackets */}
-                <div className="absolute top-3 left-3 w-5 h-5 border-t-2 border-l-2 border-white z-20" />
-                <div className="absolute top-3 right-3 w-5 h-5 border-t-2 border-r-2 border-white z-20" />
-                <div className="absolute bottom-3 left-3 w-5 h-5 border-b-2 border-l-2 border-white z-20" />
-                <div className="absolute bottom-3 right-3 w-5 h-5 border-b-2 border-r-2 border-white z-20" />
+                <div className="absolute top-2.5 left-2.5 sm:top-3 sm:left-3 w-4 h-4 sm:w-5 sm:h-5 border-t-2 border-l-2 border-white z-20" />
+                <div className="absolute top-2.5 right-2.5 sm:top-3 sm:right-3 w-4 h-4 sm:w-5 sm:h-5 border-t-2 border-r-2 border-white z-20" />
+                <div className="absolute bottom-2.5 left-2.5 sm:bottom-3 sm:left-3 w-4 h-4 sm:w-5 sm:h-5 border-b-2 border-l-2 border-white z-20" />
+                <div className="absolute bottom-2.5 right-2.5 sm:bottom-3 sm:right-3 w-4 h-4 sm:w-5 sm:h-5 border-b-2 border-r-2 border-white z-20" />
 
                 {/* Top Bar inside Popped Up Card */}
-                <div className="flex items-center justify-between z-20 pb-2">
-                  <div className="flex items-center gap-2">
-                    <span className="px-2.5 py-1 rounded-lg bg-white text-black font-mono font-bold text-xs shadow-md">
+                <div className="flex items-center justify-between z-20 pb-1.5 sm:pb-2">
+                  <div className="flex items-center gap-1.5 sm:gap-2">
+                    <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md sm:rounded-lg bg-white text-black font-mono font-bold text-[10px] sm:text-xs shadow-md">
                       MEM_{String(activeIndex + 1).padStart(2, '0')}
                     </span>
-                    <span className="px-2.5 py-1 rounded-lg bg-white/10 border border-white/30 text-white font-mono text-xs">
+                    <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md sm:rounded-lg bg-white/10 border border-white/30 text-white font-mono text-[10px] sm:text-xs">
                       #{selectedPhoto.tag || 'Memory'}
                     </span>
                   </div>
 
                   <button
                     onClick={() => setSelectedPhoto(null)}
-                    className="w-9 h-9 rounded-full bg-white/15 hover:bg-white text-white hover:text-black border border-white/30 flex items-center justify-center transition-all shadow-lg active:scale-95"
+                    className="w-7 h-7 sm:w-9 sm:h-9 rounded-full bg-white/15 hover:bg-white text-white hover:text-black border border-white/30 flex items-center justify-center transition-all shadow-lg active:scale-95"
                     title="Close Pop Up (Esc)"
                   >
-                    <X className="w-5 h-5" />
+                    <X className="w-4 h-4 sm:w-5 sm:h-5" />
                   </button>
                 </div>
 
                 {/* Full Uncut Photo Container */}
-                <div className="relative w-full flex-1 min-h-0 rounded-2xl overflow-hidden bg-black/95 border border-white/20 flex items-center justify-center p-2 my-2">
+                <div className="relative w-full flex-1 min-h-0 rounded-xl sm:rounded-2xl overflow-hidden bg-black/95 border border-white/20 flex items-center justify-center p-1 sm:p-2 my-1 sm:my-2">
                   {/* Ambient Glow */}
                   <img
                     src={selectedPhoto.url}
@@ -494,26 +495,26 @@ export default function HolographicPhotoGallery3D({ photos = [], isOpen, onClose
                   <img
                     src={selectedPhoto.url}
                     alt={selectedPhoto.caption}
-                    className="relative z-10 max-h-full max-w-full w-auto h-auto object-contain mx-auto drop-shadow-2xl rounded-xl"
+                    className="relative z-10 max-h-full max-w-full w-auto h-auto object-contain mx-auto drop-shadow-2xl rounded-lg sm:rounded-xl"
                   />
                 </div>
 
                 {/* Bottom Caption & Date */}
-                <div className="pt-2 px-1 z-20 flex-shrink-0 flex items-center justify-between gap-4">
-                  <div>
-                    <h3 className="text-base sm:text-lg font-bold text-white leading-snug">
+                <div className="pt-1.5 sm:pt-2 px-1 z-20 flex-shrink-0 flex items-center justify-between gap-2 sm:gap-4">
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-xs sm:text-base font-bold text-white leading-snug truncate">
                       {selectedPhoto.caption}
                     </h3>
-                    <p className="text-xs font-mono text-slate-400 mt-0.5">
+                    <p className="text-[10px] sm:text-xs font-mono text-slate-400 mt-0.5 truncate">
                       {selectedPhoto.date || 'Timeless'} • {selectedPhoto.location || 'Special Memory'}
                     </p>
                   </div>
 
                   <button
                     onClick={() => setSelectedPhoto(null)}
-                    className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs font-mono font-bold whitespace-nowrap transition-all"
+                    className="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg sm:rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white text-[10px] sm:text-xs font-mono font-bold whitespace-nowrap transition-all flex-shrink-0"
                   >
-                    Return to Orbit
+                    Return
                   </button>
                 </div>
               </div>
