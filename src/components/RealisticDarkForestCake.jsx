@@ -82,27 +82,33 @@ export default function RealisticDarkForestCake({
         <div className="absolute bottom-0 inset-x-0 h-28 bg-gradient-to-t from-black via-black/60 to-transparent pointer-events-none" />
 
         {/* Interactive Floating Hover Prompt Badge */}
-        <div className="absolute top-3 sm:top-4 left-1/2 -translate-x-1/2 z-40 pointer-events-none transition-all duration-300">
+        <div className="absolute top-2 sm:top-3.5 left-1/2 -translate-x-1/2 z-40 pointer-events-none transition-all duration-300 w-max max-w-[92vw]">
           {!candlesBlown && !isBlowing && (
-            <div className="px-5 py-2 rounded-full bg-black/90 backdrop-blur-md border border-white/35 text-white text-xs sm:text-sm font-mono shadow-2xl flex items-center gap-2 group-hover:scale-105 group-hover:border-white transition-all">
-              <Wind className="w-4 h-4 text-white animate-pulse" />
-              <span>Click cake to blow out candles! 💨</span>
+            <div className="px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-black/90 backdrop-blur-md border border-white/35 text-white text-[11px] sm:text-xs font-mono shadow-2xl flex items-center gap-1.5 group-hover:scale-105 group-hover:border-white transition-all whitespace-nowrap">
+              <Wind className="w-3.5 h-3.5 text-white animate-pulse" />
+              <span>
+                <span className="sm:hidden">Tap cake to blow candles 💨</span>
+                <span className="hidden sm:inline">Click cake to blow out candles! 💨</span>
+              </span>
             </div>
           )}
           {isBlowing && (
-            <div className="px-5 py-2 rounded-full bg-white text-black text-xs sm:text-sm font-mono font-bold shadow-2xl flex items-center gap-2 animate-bounce">
-              <Wind className="w-4 h-4 text-black" />
-              <span>Blowing out the candles... 🌬️</span>
+            <div className="px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-white text-black text-[11px] sm:text-xs font-mono font-bold shadow-2xl flex items-center gap-1.5 animate-bounce whitespace-nowrap">
+              <Wind className="w-3.5 h-3.5 text-black" />
+              <span>Blowing out candles... 🌬️</span>
             </div>
           )}
           {candlesBlown && !cakeCut && !isCutting && (
-            <div className="px-5 py-2 rounded-full bg-black/90 backdrop-blur-md border border-white/40 text-white text-xs sm:text-sm font-mono shadow-2xl flex items-center gap-2 group-hover:scale-105 group-hover:border-white transition-all animate-pulse">
-              <span>🔪 Click cake to slice with ceremonial knife!</span>
+            <div className="px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-black/90 backdrop-blur-md border border-white/40 text-white text-[11px] sm:text-xs font-mono shadow-2xl flex items-center gap-1.5 group-hover:scale-105 group-hover:border-white transition-all animate-pulse whitespace-nowrap">
+              <span>
+                <span className="sm:hidden">🔪 Tap cake to slice!</span>
+                <span className="hidden sm:inline">🔪 Click cake to slice with ceremonial knife!</span>
+              </span>
             </div>
           )}
           {isCutting && (
-            <div className="px-5 py-2 rounded-full bg-white text-black text-xs sm:text-sm font-mono font-bold shadow-2xl flex items-center gap-2">
-              <span>🔪 Slicing the Dark Forest cake...</span>
+            <div className="px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-white text-black text-[11px] sm:text-xs font-mono font-bold shadow-2xl flex items-center gap-1.5 whitespace-nowrap">
+              <span>🔪 Slicing the cake...</span>
             </div>
           )}
         </div>
