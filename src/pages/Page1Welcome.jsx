@@ -5,12 +5,10 @@ import {
   Gift,
   Layers,
   RotateCcw,
-  Sparkles,
-  Clock
+  Sparkles
 } from 'lucide-react';
 import HolographicPhotoGallery3D from '../components/HolographicPhotoGallery3D';
 import RealisticDarkForestCake from '../components/RealisticDarkForestCake';
-import CountdownSection from '../components/CountdownSection';
 import {
   playBlowCandleSound,
   playCakeSliceSound,
@@ -189,12 +187,6 @@ export default function Page1Welcome({
             </div>
           </div>
 
-          {/* Milestone Birthday Badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 border border-white/20 text-white font-mono text-xs shadow-glow-white mb-2">
-            <Clock className="w-3.5 h-3.5 text-white animate-spin-slow" />
-            <span>Official Birthday: <strong>November 25, 2026</strong></span>
-          </div>
-
           {/* Big Bold Headline */}
           <h1 className="text-4xl sm:text-6xl md:text-7xl font-serif-festive font-black tracking-tight text-white mb-2 leading-tight">
             Happy Birthday, <br />
@@ -257,19 +249,6 @@ export default function Page1Welcome({
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif-festive font-black text-white leading-tight">
               Happy Birthday, <span className="animate-text-shimmer-bw">{celebrant.name}</span>! 🎂
             </h2>
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 border border-white/20 text-white font-mono text-xs shadow-glow-white mx-auto my-2">
-              <Clock className="w-3.5 h-3.5 text-white animate-spin-slow" />
-              <span>Official Birthday: <strong>November 25, 2026</strong></span>
-              <span className="text-zinc-500">•</span>
-              <button
-                onClick={() => {
-                  document.getElementById('countdown-section')?.scrollIntoView({ behavior: 'smooth' });
-                }}
-                className="text-slate-300 hover:text-white underline decoration-dotted transition-colors"
-              >
-                View Live Countdown ↓
-              </button>
-            </div>
             <p className="text-xs sm:text-sm md:text-base text-slate-300 max-w-xl mx-auto font-mono mt-1">
               {!candlesBlown && `Make a silent wish, then blow out your ${celebrant.age} milestone candles.`}
               {candlesBlown && !cakeCut && "The candles are blown! Now slice the rich Dark Forest cake with the silver ceremonial knife."}
@@ -355,14 +334,7 @@ export default function Page1Welcome({
       )}
 
       {/* ========================================================
-          3. OFFICIAL 25TH NOVEMBER LUXURY COUNTDOWN SECTION
-         ======================================================== */}
-      <div id="countdown-section" className="w-full">
-        <CountdownSection celebrant={celebrant} />
-      </div>
-
-      {/* ========================================================
-          4. 3D HOLOGRAPHIC PHOTO GALLERY MODAL
+          3. 3D HOLOGRAPHIC PHOTO GALLERY MODAL
          ======================================================== */}
       <HolographicPhotoGallery3D
         photos={photos}
