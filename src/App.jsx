@@ -8,6 +8,7 @@ import {
 import Navbar from './components/Navbar';
 import FloatingBalloons from './components/FloatingBalloons';
 import MusicPlayerBar from './components/MusicPlayerBar';
+import LockedCountdownVault from './components/LockedCountdownVault';
 
 // 4 Dedicated Themed Chapters
 import Page1Welcome from './pages/Page1Welcome';
@@ -132,6 +133,35 @@ export default function App() {
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
 
+  // Locked Vault State (Locked until Nov 25th 00:00:00 unless VIP Early Access is unlocked)
+  const [isEarlyAccessUnlocked, setIsEarlyAccessUnlocked] = useState(() => {
+    return localStorage.getItem('bday_early_access_unlocked') === 'true';
+  });
+
+  const isLocked = React.useMemo(() => {
+    if (isEarlyAccessUnlocked) return false;
+    const now = new Date();
+    // If today is November 25th in local time (10 = November in JS 0-indexed month)
+    if (now.getMonth() === 10 && now.getDate() === 25) return false;
+
+    // Check target date
+    const target = new Date(celebrant?.birthDate || '2026-11-25T00:00:00');
+    if (!isNaN(target.getTime()) && now.getTime() >= target.getTime()) {
+      return false;
+    }
+    return true;
+  }, [isEarlyAccessUnlocked, celebrant?.birthDate]);
+
+  const handleUnlockEarly = () => {
+    setIsEarlyAccessUnlocked(true);
+    localStorage.setItem('bday_early_access_unlocked', 'true');
+  };
+
+  const handleRelock = () => {
+    setIsEarlyAccessUnlocked(false);
+    localStorage.removeItem('bday_early_access_unlocked');
+  };
+
   // Autoplay Celebration Music as soon as the site is opened
   useEffect(() => {
     let unmounted = false;
@@ -239,12 +269,26 @@ export default function App() {
     localStorage.removeItem('bday_photos');
     localStorage.removeItem('bday_wishes');
     localStorage.removeItem('bday_unlocked_pages');
+    localStorage.removeItem('bday_early_access_unlocked');
+    setIsEarlyAccessUnlocked(false);
     setCelebrant(defaultCelebrant);
     setPhotos(defaultPhotos);
     setWishes(defaultWishes);
     setUnlockedPages([1]);
     setCurrentPage(1);
   };
+
+  // If the birthday vault is locked before November 25th midnight
+  if (isLocked) {
+    return (
+      <LockedCountdownVault
+        celebrant={celebrant}
+        onUnlock={handleUnlockEarly}
+        isPlayingAudio={isPlayingAudio}
+        setIsPlayingAudio={setIsPlayingAudio}
+      />
+    );
+  }
 
   return (
     <div className="bg-black text-white relative selection:bg-white selection:text-black font-sans antialiased min-h-screen">
@@ -340,6 +384,24 @@ export default function App() {
         onUpdateWishes={setWishes}
         onResetDefaults={handleResetDefaults}
       />
+
+      {/* Floating Early Access / Relock Controller */}
+      {isEarlyAccessUnlocked && (
+        <aside
+          aria-label="Preview Controller"
+          className="fixed bottom-4 left-4 z-50 flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-zinc-950/90 border border-white/20 text-xs font-mono text-zinc-300 shadow-2xl backdrop-blur-md"
+        >
+          <span>🔓 VIP Preview Mode</span>
+          <span className="text-zinc-600">•</span>
+          <button
+            onClick={handleRelock}
+            className="text-white hover:text-rose-400 font-bold underline transition-colors"
+            title="Lock the site with the countdown again"
+          >
+            Lock with Countdown 🔒
+          </button>
+        </aside>
+      )}
     </div>
   );
 }
